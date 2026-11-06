@@ -1,0 +1,14 @@
+services:
+  php2shell-target:
+    build: .
+    ports:
+      - "127.0.0.1:8080:80"
+    environment:
+      - PHP_INI_SCAN_DIR=/usr/local/etc/php/conf.d
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/') === false ? 1 : 0);"]
+      interval: 15s
+      timeout: 2s
+      retries: 10
+      start_period: 2s
+    restart: unless-stopped
